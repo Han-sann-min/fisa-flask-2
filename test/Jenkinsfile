@@ -12,27 +12,27 @@ node {
 
       stage('Build') {
             sh(script: '''yes | sudo docker image prune -a''')
-            sh(script: '''sudo docker build -t flask_app .''')
+            sh(script: '''sudo docker build -t flask_app5 .''')
         }
 
       stage('Tag') {
-              sh(script: '''sudo docker tag flask_app ${DOCKER_USER_ID}/flask_app:${BUILD_NUMBER}''') 
+              sh(script: '''sudo docker tag flask_app5 ${DOCKER_USER_ID}/flask_app5:${BUILD_NUMBER}''') 
             }
 
       stage('Push') {
             sh(script: 'sudo docker login -u ${DOCKER_USER_ID} -p ${DOCKER_USER_PASSWORD}') 
-            sh(script: 'sudo docker push ${DOCKER_USER_ID}/flask_app:${BUILD_NUMBER}') 
+            sh(script: 'sudo docker push ${DOCKER_USER_ID}/flask_app5:${BUILD_NUMBER}') 
         }
       
 stage('Deploy') {
             sshagent(credentials: ['flask-ec2-server']) {
                 sh(script: 'ssh ubuntu@3.34.48.226 "sudo docker rm -f docker-flask"')
-                sh(script: 'ssh ubuntu@3.34.48.226 "sudo docker run --name docker-flask --env-file .env -e TZ=Asia/Seoul -p 80:80 -d -t \${DOCKER_USER_ID}/flask_app:\${BUILD_NUMBER}"')
+                sh(script: 'ssh ubuntu@3.34.48.226 "sudo docker run --name docker-flask --env-file .env -e TZ=Asia/Seoul -p 80:80 -d -t \${DOCKER_USER_ID}/flask_app5:\${BUILD_NUMBER}"')
         }
     }
 
     stage('Cleaning up') { 
-              sh "sudo docker rmi ${DOCKER_USER_ID}/flask_app:${BUILD_NUMBER}" // sudo docker image 제거
+              sh "sudo docker rmi ${DOCKER_USER_ID}/flask_app5:${BUILD_NUMBER}" // sudo docker image 제거
       } 
     }
   }
