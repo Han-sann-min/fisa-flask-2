@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- 답변 등록 -->
+<div class="container">
+    <h5 class="my-3 border-bottom pb-2">답변 올리기</h5>
+    {% if modify %} 
+        <form method="post" class="my-3" action="{{ url_for('answer.modify', answer_id=answer_id) }}">
+    {% else %}
+        <form method="post" class="my-3" action="{{ url_for('answer.create', question_id=question_id) }}">
+    {% endif %}
+    <!-- 오류표시 Start -->
+    {{ g.user.username }}
+    {% include 'form_errors.html' %}
+    <!-- 오류표시 End -->
+        {{ form.csrf_token }}
+
+        {{ form.content.label }}
+        {{ form.content(class="form-control") }}
+
+        <button type="submit" class="btn btn-primary">답변완료</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,103 @@
+## flask shell
+>>> from test.models import Question
+>>> from datetime import datetime
+>>> q = Question(subject="제목입니다", content="내용입니다", create_date=datetime.now())
+>>> q
+<Question (transient 2955131385264)>
+>>> from test import db                                                           
+>>> db.session.add(q)         
+>>> db.session.commit()
+>>> q
+<Question 1>
+>>> q.id
+1
+>>> q.content
+'내용입니다'
+>>> q.subject
+'제목입니다'
+>>> Question.query.all()
+[<Question 1>]
+>>> Question.query.filter(Question.id==1).all()
+[<Question 1>]
+>>> q
+<Question (transient 2955131821776)>
+>>> db.session.add(q)   
+>>> db.session.commit() 
+>>> Question.query.all()
+[<Question 1>, <Question 2>]
+>>> q = Question(subject="제목입니다", content="내용입니다", create_date=datetime.now())
+>>> q1 = Question(subject="날씨가 추위입니다", content="내용입니다", create_date=datetime.now())
+>>> q
+<Question (transient 2955131387856)>
+>>> q1
+<Question (transient 2955131822592)>
+>>> db.session.add(q)    
+>>> db.session.add(q1) 
+>>> db.session.commit()  
+>>> Question.query.filter(Question.id==2).all() 
+[<Question 2>]
+>>> Question.query.filter(Question.id==2).all()
+[<Question 2>]
+>>> q = Question.query.filter(Question.id==2).all() 
+>>> q.subject
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'list' object has no attribute 'subject'
+>>> q.content
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'list' object has no attribute 'content'
+>>> q = Question.query.filter(Question.id==2).get() 
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+TypeError: Query.get() missing 1 required positional argument: 'ident'
+>>> q = Question.query.get(2)                        
+>>> q
+<Question 2>
+>>> q.subject
+'제목입니다2'
+>>> q = Question.query.filter(Question.subject.like("%날씨%")).get() 
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+TypeError: Query.get() missing 1 required positional argument: 'ident'
+>>> q = Question.query.filter(Question.subject.like("%날씨%")).all() 
+>>> q
+[<Question 4>]
+>>> q[0]
+<Question 4>
+>>> q[0].subject
+'날씨가 추위입니다'
+>>> q[0].subject = "날씨가 매우 춥습니다"
+>>> q[0].subject                         
+'날씨가 매우 춥습니다'
+>>> db.session.commit()
+>>> q
+[<Question 4>]
+>>> db.session.delete(q)
+Traceback (most recent call last):
+  File "C:\ITStudy\09_flask\fisa-flask\myproject\lib\site-packages\sqlalchemy\orm\session.py", line 3478, in delete
+    state = attributes.instance_state(instance)
+AttributeError: 'list' object has no attribute '_sa_instance_state'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "C:\ITStudy\09_flask\fisa-flask\myproject\lib\site-packages\sqlalchemy\orm\scoping.py", line 672, in delete
+    return self._proxied.delete(instance)
+  File "C:\ITStudy\09_flask\fisa-flask\myproject\lib\site-packages\sqlalchemy\orm\session.py", line 3480, in delete
+    raise exc.UnmappedInstanceError(instance) from err
+sqlalchemy.orm.exc.UnmappedInstanceError: Class 'builtins.list' is not mapped     
+>>> db.session.delete(q[0])
+>>> db.session.commit()     
+
+- 여러분의 이름을 question 테이블의 content 속성에 넣어서 1개 글을 작성하세요
+- filter를 사용해서 그 글을 가져와보세요 v 
+- 글의 content를 '신짱구'로 변경해보세요
+- 그 글을 삭제해주세요
+
+
+    ### <% %> = {% %} 
+<%= %> = {{ }}
+<%-- --%> = {# ... #} 
+<jsp include: > = {% include 'header.html' %} ###
