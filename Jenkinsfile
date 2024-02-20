@@ -6,7 +6,7 @@ node {
     
     { 
      stage('Pull') {
-           git branch: 'main', credentialsId: 'github-server', url: 'https://github.com/sorkdhkd33/fisa-flask-2/'
+           git branch: 'main', credentialsId: 'github-server', url: 'https://github.com/Han-sann-min/fisa-flask-2/'
         }
         
 
@@ -26,8 +26,8 @@ node {
       
 stage('Deploy') {
             sshagent(credentials: ['flask-ec2-server']) {
-                sh(script: 'ssh ubuntu@3.34.48.226 "sudo docker rm -f docker-flask"')
-                sh(script: 'ssh ubuntu@3.34.48.226 "sudo docker run --name docker-flask --env-file .env -e TZ=Asia/Seoul -p 80:80 -d -t \${DOCKER_USER_ID}/flask_app5:\${BUILD_NUMBER}"')
+                sh(script: 'ssh ubuntu@15.164.87.34 "sudo docker rm -f docker-flask"')
+                sh(script: 'ssh ubuntu@15.164.87.34 "sudo docker run --name docker-flask --env-file .env -e TZ=Asia/Seoul -p 80:80 -d -t \${DOCKER_USER_ID}/flask_app5:\${BUILD_NUMBER}"')
         }
     }
 
